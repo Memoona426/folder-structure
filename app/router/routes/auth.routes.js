@@ -15,6 +15,6 @@ router.post("/signIn", signIn);
 router.post("/forgotPassword", forgotPassword);
 router.post("/resetPassword", resetPassword);
 router.post('/varifyAccount', varifyAccount);
-console.log("hello world")
+
 
 module.exports = router;
