@@ -11,7 +11,7 @@ const generateJwt = (payload) => {
 const verifyJwt = (token) => {
     const secretKey = process.env.JWT_SECRET;
     try {
-        const decoded = jwt.verify(token, secretKey);
+        const decoded = jwt.verify(token, secretKey); //valid
         return decoded;
     } catch (error) {
         throw error;

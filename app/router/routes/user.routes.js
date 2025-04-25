@@ -1,17 +1,17 @@
 const express = require("express");
 const {
-  getUser,
-  postUser,
-  deleteUser,
-  updateUser,
-  getAllUser,
-} = require("../../controllers/user.controller");
+  createUser,
+  toggleUser,
+  getAllUserBySuperAdmin,
+  getAllUserByAdmin
+} = require ("../../controllers/user.controller");
 const router = express.Router();
 
-router.get("/getUser", getUser);
-router.post("/postUser", postUser);
-router.delete("/deleteUser", deleteUser);
-router.patch("/updateUser", updateUser);
-router.get("/getAllUser", getAllUser);
+router.post("/create", createUser);
+router.get("/getAllUserBySuperAdmin", getAllUserBySuperAdmin);
+router.get("/getAllUserByAdmin", getAllUserByAdmin);
+router.post("/toggleStatusByAdmin", toggleUser);
+module.exports = router;
 
-module.exports = router
+
+
