@@ -7,12 +7,13 @@ const userProfileSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    fullName: { type: String },
-    age: { type: Number },
-    gender: { type: String, enum: ["male", "female", "other"] },
-    phone: { type: String },
-    address: { type: String },
-    bio: { type: String }
+    fullName: { type: String, required: false, default: "", },
+    profilePic: { type: String, required: false, default: "", },
+    age: { type: Number, required: false, default: 0 },
+    gender: { type: String, enum: ["male", "female", "other"], required: false, default: "other" },
+    phone: { type: String, required: false, default: "" },
+    address: { type: String, required: false, default: "" },
+    bio: { type: String, required: false, default: "" }
 }, { timestamps: true });
 
 module.exports = mongoose.model('UserProfile', userProfileSchema);

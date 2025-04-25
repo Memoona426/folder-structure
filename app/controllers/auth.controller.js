@@ -3,68 +3,86 @@ const { generateJwt, verifyJwt } = require("../config/jwt");
 const sendMail = require("../config/nodemailer");
 const User = require("../models/user.model");
 const { InternalServerError } = require("../utils/response");
+const { loggerResponse } = require("../utils/loggerResponse");
 
 const signUp = async (req, res) => {
-  const { firstName, lastName, email, password, profilePic, confirmPassword } =
+  const { name, email, password, confirmPassword, role } =
     req.body;
   try {
     if (
-      !firstName ||
-      firstName.trim() === "" ||
-      !lastName ||
-      lastName.trim() === "" ||
+      !name ||
+      name.trim() === "" ||
       !email ||
       email.trim() === "" ||
       !password ||
       password.trim() === "" ||
-      !profilePic ||
-      profilePic.trim() === "" ||
       !confirmPassword ||
       confirmPassword.trim() === ""
     ) {
+      loggerResponse({
+        type: "error",
+        message: "invalid body"
+      });
       return res.status(400).json({
         status: false,
-        message: "invalid body",
+        message: "invalid body"
       });
     }
     if (password !== confirmPassword) {
+      loggerResponse({
+        type: "error",
+        message: "password does not match "
+      });
       return res.status(400).json({
         status: false,
-        message: "password does not match ",
+        message: "password does not match "
       });
     }
     const userExists = await User.findOne({ email });
     if (userExists) {
+      loggerResponse({
+        type: "error",
+        message: "email is taken"
+      });
       return res.status(400).json({
         status: false,
-        message: "email is taken",
+        message: "email is taken"
       });
     }
     const encryptedPassword = await hashPassword(password);
     const newUser = await User.create({
-      firstName,
-      lastName,
+      name,
       email,
       password: encryptedPassword,
-      profilePic,
       isActive: false,
+      role
     });
 
-    const token = generateJwt({ id: newUser?._id });
+    const token = generateJwt({ id: newUser._id, role: newUser?.role });
     const sendMailDto = {
       to: email,
       subject: "Account Activation",
       text: "Click on this link to Activate Account",
-      html: `<a>localhost:4000/api/auth/varifyAccount?token=${token}</a>`,
+      html: `<a>localhost:4000/api/auth/varifyAccount?token=${token}</a>`
     };
     await sendMail(sendMailDto);
+
+    loggerResponse({
+      type: "info",
+      message: "Please check your mail to verify your account."
+    });
 
     return res.status(200).json({
       status: true,
       message: "Please check your mail to verify your account.",
-      sendMailDto,
+      sendMailDto
     });
   } catch (error) {
+    loggerResponse({
+      type: "error",
+      message: `internal server error in createUser Api`,
+      res: error
+    });
     return InternalServerError(res, error);
   }
 };
@@ -73,43 +91,76 @@ const signIn = async (req, res) => {
   const { email, password } = req.body;
   try {
     if (!email || email.trim() === "" || !password || password.trim() === "") {
+      loggerResponse({
+        type: "error",
+        message: "invalid body"
+      });
       return res.status(400).json({
         status: false,
-        message: "invalid body",
+        message: "invalid body"
       });
     }
-    const userExists = await User.findOne({ email });
+    let userExists = await User.findOne({ email });
     if (!userExists) {
+      loggerResponse({
+        type: "error",
+        message: "invalid credentials"
+      });
       return res.status(400).json({
         status: false,
-        message: "invalid credentials",
+        message: "invalid credentials"
       });
     }
     if (!userExists.isActive) {
+      loggerResponse({
+        type: "error",
+        message: "your account is not activated, please activate your account"
+      });
       return res.status(400).json({
         status: false,
-        message: "your account is not activated, please activate your account",
+        message: "your account is not activated, please activate your account"
       });
     }
-   
+
     const isPasswordMatch = await comparePasswords(
       password,
       userExists.password
     );
     if (!isPasswordMatch) {
+      loggerResponse({
+        type: "error",
+        message: "invalid credentials"
+      });
       return res.status(400).json({
         status: false,
-        message: "invalid credentials",
+        message: "invalid credentials"
       });
     }
-    const token = generateJwt({ id: userExists._id });
+    const token = generateJwt({ id: userExists._id, role: userExists?.role });
+
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: userExists._id },
+      { token },
+      { new: true }
+    );
+
+    loggerResponse({
+      type: "info",
+      message: "login successfull"
+    });
+
     return res.status(200).json({
       status: true,
       message: "login successfull",
-      user: userExists,
-      token,
+      user: updatedUser,
+      token
     });
   } catch (error) {
+    loggerResponse({
+      type: "error",
+      message: `internal server error in createUser Api`,
+      res: error
+    });
     return InternalServerError(res, error);
   }
 };
@@ -118,36 +169,57 @@ const forgotPassword = async (req, res) => {
   const { email } = req.body;
   try {
     if (!email || email.trim() === "") {
+      loggerResponse({
+        type: "error",
+        message: "Email is required"
+      });
       return res.status(400).json({
         status: false,
-        message: "Email is required",
+        message: "Email is required"
       });
     }
-    const user = await User.findOne({ email });
-    if (!user) {
+    const userExists = await User.findOne({ email });
+    if (!userExists) {
+      loggerResponse({
+        type: "error",
+        message: "User not found"
+      });
+
       return res.status(400).json({
         status: false,
-        message: "User not found",
+        message: "User not found"
       });
     }
 
-    const token = generateJwt({ id: user?._id });
+    const token = generateJwt({ id: userExists._id, role: userExists?.role });
     const sendMailDto = {
       to: email,
       subject: "Account Password Reset",
       text: "Click on this link to reset password",
-      html: `<a>localhost:4000/api/auth/resetPassword?token=${token}</a>`,
+      html: `<a>localhost:4000/api/auth/resetPassword?token=${token}</a>`
     };
     await sendMail(sendMailDto);
+
+    loggerResponse({
+      type: "info",
+      message: "email has been sent to reset your password"
+    });
+
     return res.status(200).json({
       status: true,
       message: "email has been sent to reset your password",
-      sendMailDto,
+      sendMailDto
     });
   } catch (error) {
+    loggerResponse({
+      type: "error",
+      message: `internal server error`,
+      res: error
+    });
     return InternalServerError(res, error);
   }
 };
+
 const resetPassword = async (req, res) => {
   const { password, confirmPassword } = req.body;
   const { token } = req.query;
@@ -158,15 +230,24 @@ const resetPassword = async (req, res) => {
       !confirmPassword ||
       confirmPassword.trim() === ""
     ) {
+      loggerResponse({
+        type: "error",
+        message: "invalid body"
+      });
+
       return res.status(400).json({
         status: false,
-        message: "invalid body",
+        message: "invalid body"
       });
     }
     if (password !== confirmPassword) {
+      loggerResponse({
+        type: "error",
+        message: "password does not match "
+      });
       return res.status(400).json({
         status: false,
-        message: "password does not match ",
+        message: "password does not match "
       });
     }
     const verifiedUser = verifyJwt(token);
@@ -175,22 +256,35 @@ const resetPassword = async (req, res) => {
     if (!user) {
       return res.status(400).json({
         status: false,
-        message: "User not found",
+        message: "User not found"
       });
     }
 
     const encryptedPassword = await hashPassword(password);
+
     const userData = await User.findByIdAndUpdate(
       verifiedUser?.id,
       { password: encryptedPassword },
       { new: true }
     );
+
+    loggerResponse({
+      type: "info",
+      message: "User password has been reset"
+    });
+
     return res.status(200).json({
       status: true,
       message: "User password has been reset",
-      user: userData,
+      user: userData
     });
+
   } catch (error) {
+    loggerResponse({
+      type: "error",
+      message: `internal server error in createUser Api`,
+      res: error
+    });
     return InternalServerError(res, error);
   }
 };
@@ -201,7 +295,7 @@ const varifyAccount = async (req, res) => {
     if (!token) {
       return res.status(401).json({
         status: false,
-        message: "Token is needed",
+        message: "Token is needed"
       });
     }
 
@@ -209,9 +303,13 @@ const varifyAccount = async (req, res) => {
 
     const user = await User.findById(verifiedUser?.id);
     if (!user) {
+      loggerResponse({
+        type: "error",
+        message: "User not found"
+      });
       return res.status(400).json({
         status: false,
-        message: "User not found",
+        message: "User not found"
       });
     }
     const userData = await User.findByIdAndUpdate(
@@ -220,15 +318,54 @@ const varifyAccount = async (req, res) => {
       { new: true }
     );
 
+    loggerResponse({
+      type: "info",
+      message: "Account has been activated",
+    });
+
     return res.status(200).json({
       status: true,
       message: "Account has been activated",
-      user: userData,
+      user: userData
     });
   } catch (error) {
+    loggerResponse({
+      type: "error",
+      message: `internal server error in createUser Api`,
+      res: error
+    });
     return InternalServerError(res, error);
   }
 };
+
+const logOutUser = async (req, res) => {
+  const { id } = req
+  try {
+
+    await User.findByIdAndUpdate(
+      id,
+      { token: "" },
+      { new: true }
+    );
+
+    loggerResponse({
+      type: "info",
+      message: "User has been logout"
+    });
+
+    return res.status(200).json({
+      status: true,
+      message: "User has been logout"
+    });
+  } catch (err) {
+    loggerResponse({
+      type: "error",
+      message: `internal server error in createUser Api`,
+      res: err
+    });
+    return InternalServerError(res, err);
+  }
+}
 
 module.exports = {
   signIn,
@@ -236,4 +373,5 @@ module.exports = {
   forgotPassword,
   resetPassword,
   varifyAccount,
+  logOutUser
 };

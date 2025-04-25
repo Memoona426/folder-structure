@@ -1,16 +1,24 @@
 const express = require("express");
+const { authGuard } = require("../../middleware/authGaurd");
+
 const {
-  createUser,
-  toggleUser,
+  createUserBySuperAdmin,
+  toggleUserByAdmin,
   getAllUserBySuperAdmin,
-  getAllUserByAdmin
-} = require ("../../controllers/user.controller");
+  getAllUserByAdmin,
+  createUserByAdmin,
+  assignProfileBySuperAdmin
+} = require("../../controllers/user.controller");
+
 const router = express.Router();
 
-router.post("/create", createUser);
-router.get("/getAllUserBySuperAdmin", getAllUserBySuperAdmin);
-router.get("/getAllUserByAdmin", getAllUserByAdmin);
-router.post("/toggleStatusByAdmin", toggleUser);
+router.post("/createUserBySuperAdmin", authGuard, createUserBySuperAdmin);
+router.post("/createUserByAdmin", authGuard, createUserByAdmin);
+
+router.get("/getAllUserBySuperAdmin", authGuard, getAllUserBySuperAdmin);
+router.get("/getAllUserByAdmin", authGuard, getAllUserByAdmin);
+router.patch("/toggleUserByAdmin", authGuard, toggleUserByAdmin);
+router.patch("/assignProfileBySuperAdmin", authGuard, assignProfileBySuperAdmin);
 module.exports = router;
 
 

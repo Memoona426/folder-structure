@@ -5,12 +5,13 @@ const {
     updateProfile,
     deleteProfile,
 } = require("../../controllers/userProfile.controller");
+const { authGuard } = require("../../middleware/authGaurd");
 
 const router = express.Router();
 
-router.post("/profile", createProfile);             
-router.get("/profile/:id", getProfile);            
-router.put("/profile/:id", updateProfile);          
-router.delete("/profile/:id", deleteProfile);       
+router.post("/", authGuard, createProfile);
+router.get("/", authGuard, getProfile);
+router.patch("/", authGuard, updateProfile);
+router.delete("/", authGuard, deleteProfile);
 
 module.exports = router;

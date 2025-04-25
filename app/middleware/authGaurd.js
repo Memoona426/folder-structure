@@ -1,5 +1,6 @@
 const { verifyJwt } = require("../config/jwt");
 const { unAuthenticateResponse } = require("../utils/response");
+
 const authGuard = async (req, res, next) => {
   try {
     const header = req.headers["authorization"];
@@ -18,8 +19,10 @@ const authGuard = async (req, res, next) => {
     }
 
     const id = verify.id;
+    const role = verify.role;
 
     req.id = id;
+    req.role = role;
     return next();
   } catch (error) {
     return unAuthenticateResponse(res, error);

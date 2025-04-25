@@ -1,9 +1,10 @@
 const UserProfile = require("../models/userProfile.model");
 
 const createProfile = async (req, res) => {
-  const { userId, fullName, age, gender, phone, address, bio } = req.body;
-
+  const { age = "", gender = 0, phone = "", address = "", bio = "", profilePic = "" } = req.body;
+  const { id } = req
   try {
+
     const existingProfile = await UserProfile.findOne({ userId });
     if (existingProfile) {
       return res
@@ -12,19 +13,20 @@ const createProfile = async (req, res) => {
     }
 
     const newProfile = await UserProfile.create({
-      userId,
+      userId: id,
       fullName,
       age,
       gender,
       phone,
       address,
       bio,
+      profilePic
     });
 
     return res.status(201).json({
       status: true,
       message: "Profile created successfully",
-      profile: newProfile,
+      profile: newProfile
     });
   } catch (err) {
     return res
@@ -34,20 +36,22 @@ const createProfile = async (req, res) => {
 };
 
 const getProfile = async (req, res) => {
-  const { userId } = req.query;
+  const { id } = req;
   try {
-    const profile = await UserProfile.findOne({ userId });
+    const profile = await UserProfile.findOne({ userId: id });
+
     if (!profile)
       return res.status(404).json({
         status: false,
-        message: "Profile not found",
+        message: "Profile not found"
       });
 
     return res.status(200).json({
       status: true,
       message: "Profile fetched",
-      profile,
+      profile
     });
+
   } catch (err) {
     return res
       .status(500)
@@ -56,25 +60,27 @@ const getProfile = async (req, res) => {
 };
 
 const updateProfile = async (req, res) => {
-  const { userId } = req.query;
+  const { id } = req;
   try {
     const updatedProfile = await UserProfile.findOneAndUpdate(
-      { userId },
+      { userId: id },
       req.body,
       { new: true }
     );
+
     if (!updatedProfile) {
       return res.status(404).json({
         status: true,
-        message: "Profile not found, please create a profile.",
-        profile: updatedProfile,
+        message: "Profile not found, please create a profile."
       });
     }
+
     return res.status(200).json({
       status: true,
       message: "Profile updated",
-      profile: updatedProfile,
+      profile: updatedProfile
     });
+
   } catch (err) {
     return res
       .status(500)
@@ -83,19 +89,21 @@ const updateProfile = async (req, res) => {
 };
 
 const deleteProfile = async (req, res) => {
-  const { userId } = req.query;
+  const { id } = req;
   try {
-    const deletedProfile = await UserProfile.findOneAndDelete({ userId });
+    const deletedProfile = await UserProfile.findOneAndDelete({ userId: id });
+
     if (!deletedProfile)
       return res.status(404).json({
         status: false,
-        message: "Profile not found",
+        message: "Profile not found"
       });
 
     return res.status(200).json({
       status: true,
-      message: "Profile deleted",
+      message: "Profile deleted"
     });
+
   } catch (err) {
     return res
       .status(500)

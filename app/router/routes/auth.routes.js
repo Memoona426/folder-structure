@@ -6,7 +6,9 @@ const {
   resetPassword,
   forgotPassword,
   varifyAccount,
+  logOutUser,
 } = require("../../controllers/auth.controller");
+const { authGuard } = require("../../middleware/authGaurd");
 
 const router = express.Router();
 
@@ -15,6 +17,7 @@ router.post("/signIn", signIn);
 router.post("/forgotPassword", forgotPassword);
 router.post("/resetPassword", resetPassword);
 router.post('/varifyAccount', varifyAccount);
+router.post('/logout', authGuard, logOutUser);
 
 
 module.exports = router;

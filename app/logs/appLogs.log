@@ -50,3 +50,50 @@
     at next (C:\Users\l\Desktop\node js\PROJECT_1\node_modules\router\index.js:291:5)
     at Function.handle (C:\Users\l\Desktop\node js\PROJECT_1\node_modules\router\index.js:186:3)
 2025-04-25 20:26:28 info: fetch all users
+2025-04-25 22:12:52 error: ValidationError: User validation failed: name: Path `name` is required.
+    at Document.invalidate (C:\Techinoid\folder-structure\node_modules\mongoose\lib\document.js:3351:32)
+    at C:\Techinoid\folder-structure\node_modules\mongoose\lib\document.js:3112:17
+    at C:\Techinoid\folder-structure\node_modules\mongoose\lib\schemaType.js:1407:9
+    at process.processTicksAndRejections (node:internal/process/task_queues:77:11)
+2025-04-25 22:15:00 error: ReferenceError: firstName is not defined
+    at signUp (C:\Techinoid\folder-structure\app\controllers\auth.controller.js:14:7)
+    at Layer.handleRequest (C:\Techinoid\folder-structure\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Techinoid\folder-structure\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\Techinoid\folder-structure\node_modules\router\lib\route.js:117:3)
+    at handle (C:\Techinoid\folder-structure\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\Techinoid\folder-structure\node_modules\router\lib\layer.js:152:17)
+    at C:\Techinoid\folder-structure\node_modules\router\index.js:295:15
+    at processParams (C:\Techinoid\folder-structure\node_modules\router\index.js:582:12)
+    at next (C:\Techinoid\folder-structure\node_modules\router\index.js:291:5)
+    at Function.handle (C:\Techinoid\folder-structure\node_modules\router\index.js:186:3)
+2025-04-25 22:16:13 info: Please check your mail to verify your account.
+2025-04-25 22:16:41 info: Account has been activated
+2025-04-25 22:18:52 info: login successfull
+2025-04-25 22:19:29 error: ReferenceError: userExists is not defined
+    at forgotPassword (C:\Techinoid\folder-structure\app\controllers\auth.controller.js:196:37)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+2025-04-25 22:20:12 info: email has been sent to reset your password
+2025-04-25 22:20:44 info: User password has been reset
+2025-04-25 22:21:04 error: invalid credentials
+2025-04-25 22:21:34 info: User has been logout
+2025-04-25 22:24:30 error: Only for Super admin
+2025-04-25 22:45:27 error: invalid credentials
+2025-04-25 22:45:37 error: invalid credentials
+2025-04-25 22:45:57 info: Please check your mail to verify your account.
+2025-04-25 22:46:16 error: JsonWebTokenError: invalid token
+    at module.exports [as verify] (C:\Techinoid\folder-structure\node_modules\jsonwebtoken\verify.js:82:17)
+    at verifyJwt (C:\Techinoid\folder-structure\app\config\jwt.js:14:29)
+    at varifyAccount (C:\Techinoid\folder-structure\app\controllers\auth.controller.js:301:26)
+    at Layer.handleRequest (C:\Techinoid\folder-structure\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Techinoid\folder-structure\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\Techinoid\folder-structure\node_modules\router\lib\route.js:117:3)
+    at handle (C:\Techinoid\folder-structure\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\Techinoid\folder-structure\node_modules\router\lib\layer.js:152:17)
+    at C:\Techinoid\folder-structure\node_modules\router\index.js:295:15
+    at processParams (C:\Techinoid\folder-structure\node_modules\router\index.js:582:12)
+2025-04-25 22:46:23 info: Account has been activated
+2025-04-25 22:46:40 info: login successfull
+2025-04-25 22:48:47 info: Please check your mail to verify your account.
+2025-04-25 22:48:57 info: Account has been activated
+2025-04-25 22:49:16 info: login successfull
+2025-04-25 22:49:41 info: fetch all admin and users
