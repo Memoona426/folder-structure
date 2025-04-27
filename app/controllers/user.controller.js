@@ -204,7 +204,8 @@ const toggleUserByAdmin = async (req, res) => {
 };
 
 const getAllUserBySuperAdmin = async (req, res) => {
-  const { role } = req
+  let { role } = req
+  let { page = 1, rowPerPageLimit = 10 } = req.query
   try {
 
     if (role !== "superAdmin") {
@@ -219,8 +220,14 @@ const getAllUserBySuperAdmin = async (req, res) => {
         .json({ status: false, message: `Only for Super admin`, });
     }
 
-    const admin = await User.find({ role: "admin" })
-    const user = await User.find({ role: "user" })
+    page = parseInt(page)
+    rowPerPageLimit = parseInt(rowPerPageLimit)
+
+    const totalAdmins = await User.countDocuments({ role: "admin" })
+    const totalUser = await User.countDocuments({ role: "user" })
+
+    const admin = await User.find({ role: "admin" }).skip((page - 1) * rowPerPageLimit).limit(rowPerPageLimit)
+    const user = await User.find({ role: "user" }).skip((page - 1) * rowPerPageLimit).limit(rowPerPageLimit)
 
     loggerResponse({
       type: "info",
@@ -231,7 +238,9 @@ const getAllUserBySuperAdmin = async (req, res) => {
       status: true,
       message: "fetch all admin and users",
       admin,
-      user
+      user,
+      totalAdmins,
+      totalUser
     });
   } catch (err) {
     loggerResponse({
@@ -248,7 +257,8 @@ const getAllUserBySuperAdmin = async (req, res) => {
 }
 
 const getAllUserByAdmin = async (req, res) => {
-  const { role } = req
+  let { role } = req
+  let { page = 1, rowPerPageLimit = 10 } = req.query
   try {
 
     if (role !== "admin") {
@@ -263,15 +273,22 @@ const getAllUserByAdmin = async (req, res) => {
         .json({ status: false, message: `Only for Super admin`, });
     }
 
-    const user = await User.find({ role: "user" })
+    page = parseInt(page)
+    rowPerPageLimit = parseInt(rowPerPageLimit)
+
+    const totalUser = await User.countDocuments({ role: "user" })
+    const user = await User.find({ role: "user" }).skip((page - 1) * rowPerPageLimit).limit(rowPerPageLimit)
+
     loggerResponse({
       type: "info",
       message: `fetch all users`
     });
+
     return res.status(200).json({
       status: true,
       message: "fetch all users",
-      user
+      user,
+      totalUser
     });
   } catch (err) {
     loggerResponse({

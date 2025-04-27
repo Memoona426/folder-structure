@@ -31,7 +31,7 @@
  *                 example: John Doe
  *               email:
  *                 type: string
- *                 example: john@example.com
+ *                 example: mailto:john@example.com
  *               password:
  *                 type: string
  *                 example: secret123
@@ -98,7 +98,7 @@
  *                 example: Jane Doe
  *               email:
  *                 type: string
- *                 example: jane@example.com
+ *                 example: mailto:jane@example.com
  *               password:
  *                 type: string
  *                 example: strongpassword123
@@ -165,7 +165,7 @@
  *                 example: Jane Doe
  *               email:
  *                 type: string
- *                 example: jane@example.com
+ *                 example: mailto:jane@example.com
  *               password:
  *                 type: string
  *                 example: strongpassword123
@@ -262,6 +262,19 @@
  *       - User
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - name: page
+ *         in: query
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Page Number
+ *       - name: rowPerPageLimit
+ *         in: query
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Amount of Records per page
  *     responses:
  *       200:
  *         description: Successfully fetched all admins and users
@@ -321,6 +334,19 @@
  *       - User
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - name: page
+ *         in: query
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Page Number
+ *       - name: rowPerPageLimit
+ *         in: query
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Amount of Records per page
  *     responses:
  *       200:
  *         description: Successfully fetched all users
