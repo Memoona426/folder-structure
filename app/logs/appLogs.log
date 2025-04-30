@@ -100,3 +100,45 @@
 2025-04-27 21:40:21 error: invalid credentials
 2025-04-27 21:40:53 info: login successfull
 2025-04-27 21:44:55 info: login successfull
+2025-04-27 21:48:20 info: fetch all admin and users
+2025-04-27 21:48:44 info: fetch all admin and users
+2025-04-27 21:52:48 info: Please check your mail to verify your account.
+2025-04-27 21:53:38 info: Account has been activated
+2025-04-27 21:54:19 info: login successfull
+2025-04-27 21:56:15 info: fetch all users
+2025-04-28 10:21:04 error: MongoServerSelectionError: getaddrinfo ENOTFOUND ac-3rvrcdy-shard-00-02.nb5bnxq.mongodb.net
+    at Topology.selectServer (C:\Users\l\Desktop\node js\PROJECT_1\node_modules\mongodb\lib\sdam\topology.js:321:38)
+    at async tryOperation (C:\Users\l\Desktop\node js\PROJECT_1\node_modules\mongodb\lib\operations\execute_operation.js:145:18)
+    at async executeOperation (C:\Users\l\Desktop\node js\PROJECT_1\node_modules\mongodb\lib\operations\execute_operation.js:75:16)
+    at async FindCursor._initialize (C:\Users\l\Desktop\node js\PROJECT_1\node_modules\mongodb\lib\cursor\find_cursor.js:61:26)
+    at async FindCursor.cursorInit (C:\Users\l\Desktop\node js\PROJECT_1\node_modules\mongodb\lib\cursor\abstract_cursor.js:633:27)
+    at async FindCursor.fetchBatch (C:\Users\l\Desktop\node js\PROJECT_1\node_modules\mongodb\lib\cursor\abstract_cursor.js:667:13)
+    at async FindCursor.next (C:\Users\l\Desktop\node js\PROJECT_1\node_modules\mongodb\lib\cursor\abstract_cursor.js:347:17)
+    at async Collection.findOne (C:\Users\l\Desktop\node js\PROJECT_1\node_modules\mongodb\lib\collection.js:277:21)
+    at async model.Query._findOne (C:\Users\l\Desktop\node js\PROJECT_1\node_modules\mongoose\lib\query.js:2661:15)
+    at async model.Query.exec (C:\Users\l\Desktop\node js\PROJECT_1\node_modules\mongoose\lib\query.js:4456:63)
+2025-04-28 10:22:56 error: email is taken
+2025-04-28 10:23:47 info: Please check your mail to verify your account.
+2025-04-28 10:24:31 info: Account has been activated
+2025-04-28 10:25:07 info: fetch all users
+2025-04-28 11:03:47 info: login successfull
+2025-04-28 11:07:24 info: email has been sent to reset your password
+2025-04-29 11:44:39 info: Please check your mail to verify your account.
+2025-04-30 20:55:02 error: ReferenceError: validateSchema is not defined
+    at signUp (C:\Users\l\Desktop\node js\PROJECT_1\app\controllers\auth.controller.js:12:37)
+    at Layer.handleRequest (C:\Users\l\Desktop\node js\PROJECT_1\node_modules\router\lib\layer.js:152:17)
+    at next (C:\Users\l\Desktop\node js\PROJECT_1\node_modules\router\lib\route.js:157:13)
+    at Route.dispatch (C:\Users\l\Desktop\node js\PROJECT_1\node_modules\router\lib\route.js:117:3)
+    at handle (C:\Users\l\Desktop\node js\PROJECT_1\node_modules\router\index.js:435:11)
+    at Layer.handleRequest (C:\Users\l\Desktop\node js\PROJECT_1\node_modules\router\lib\layer.js:152:17)
+    at C:\Users\l\Desktop\node js\PROJECT_1\node_modules\router\index.js:295:15
+    at processParams (C:\Users\l\Desktop\node js\PROJECT_1\node_modules\router\index.js:582:12)
+    at next (C:\Users\l\Desktop\node js\PROJECT_1\node_modules\router\index.js:291:5)
+    at Function.handle (C:\Users\l\Desktop\node js\PROJECT_1\node_modules\router\index.js:186:3)
+2025-04-30 20:56:03 error: invalid body [object Object]
+2025-04-30 20:59:03 error: invalid body [object Object]
+2025-04-30 20:59:46 error: MongooseError: Operation `users.findOne()` buffering timed out after 10000ms
+    at Timeout.<anonymous> (C:\Users\l\Desktop\node js\PROJECT_1\node_modules\mongoose\lib\drivers\node-mongodb-native\collection.js:187:23)
+    at listOnTimeout (node:internal/timers:594:17)
+    at process.processTimers (node:internal/timers:529:7)
+2025-04-30 21:00:30 info: Please check your mail to verify your account.

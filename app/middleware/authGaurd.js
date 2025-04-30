@@ -1,5 +1,6 @@
 const { verifyJwt } = require("../config/jwt");
 const { unAuthenticateResponse } = require("../utils/response");
+const User = require("../models/user.model");
 
 const authGuard = async (req, res, next) => {
   try {
@@ -20,6 +21,13 @@ const authGuard = async (req, res, next) => {
 
     const id = verify.id;
     const role = verify.role;
+
+    const userExist = await User.findOne({ _id: id });
+    if (token !== userExist.token) {
+      return res.status(401).json({
+        message: "Access denied, token is invalid.",
+      });
+    }
 
     req.id = id;
     req.role = role;
